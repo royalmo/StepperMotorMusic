@@ -3,15 +3,20 @@ from subprocess import check_output
 from threading import Thread
 from gpiozero import LED, Button
 
-def ena_and_blink():
-    led = LED(17)
-    dis = LED(12)
+def startup_sequency():
     led.on()
     dis.on()
     sleep(4.75)
     dis.off()
-    sleep(0.25)
+    for i in range(0, 400):
+      sm1.on()
+      sm2.on()
+      sm1.off()
+      sm2.off()
+      sleep(.0005)
     dis.on()
+
+def ena_and_blink():
     while True:
         if check_output("sudo iw dev wlan0 station dump", shell=True) == b'':
             dis.off()
@@ -70,25 +75,16 @@ def play_song(location):
 
 sm1 = LED(5)
 sm2 = LED(6)
+led = LED(17)
+dis = LED(12)
 stop = Button(2)
 act = [0, 0]
 
-enafunction = Thread(target=ena_and_blink)
-enafunction.start()
+startup_sequency()
 
-sleep(4.75)
-for i in range(0, 400):
-  sm1.on()
-  sm2.on()
-  sm1.off()
-  sm2.off()
-  sleep(.0005)
-
-s1 = Thread(target=step1)
-s1.start()
-
-s2 = Thread(target=step2)
-s2.start()
+Thread(target=ena_and_blink).start()
+Thread(target=step1).start()
+Thread(target=step2).start()
 
 sleep(10)
 print ( play_song("/home/pi/StepperMotorMusic/saves/sweetchildofmine.txt") )
