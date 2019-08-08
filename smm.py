@@ -40,33 +40,21 @@ def step2():
             sm2.off()
             sleep(float(act[1]) / 1000000)
 
-def getpiches():
-    pitches = []
-    with open('/home/pi/StepperMotorMusic/pitches.txt', 'r') as all_piches:
-        for line in all_piches:
-            pitches.append(int(line[:-1]))
-    return pitches
-
-def getlines(location):
-    with open(location, 'r') as song:
-        lines = []
-        for line in song:
-            line = line[:-1]
-            lines.append(line.split())
-    return lines
-
 def play_song(location):
     global act
     values = [0, 0, 0, 0]
     exit = 0
     i = 0
     timer = 0
-    lines = getlines(location)
-    pitches = getpiches()
+    with open(location, 'r') as song:
+        lines = []
+        for line in song:
+            line = line[:-1]
+            lines.append(line.split())
     while exit == 0:
         i = i + 1
         values = lines[i]
-        act = [pitches[int(values[1])], pitches[int(values[2])]]
+        act = [int(values[1]), int(values[2])]
         if stop.is_pressed:
             act = [0, 0]
             exit = 1
@@ -74,7 +62,7 @@ def play_song(location):
             act = [0, 0]
             exit = 2
         if int(values[0]) > 0:
-            sleep(float(values[0]) / 1000000)
+            sleep(float(values[0]) / 1000)
     if exit == 1:
         return i
     else:
@@ -83,7 +71,6 @@ def play_song(location):
 sm1 = LED(5)
 sm2 = LED(6)
 stop = Button(2)
-
 act = [0, 0]
 
 enafunction = Thread(target=ena_and_blink)
