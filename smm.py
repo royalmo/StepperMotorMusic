@@ -77,7 +77,7 @@ sm1 = LED(5)
 sm2 = LED(6)
 led = LED(17)
 dis = LED(12)
-stop = Button(2)
+stop = Button(19)
 act = [0, 0]
 
 startup_sequency()
