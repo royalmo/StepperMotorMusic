@@ -76,6 +76,7 @@ def crearfitx(l, ubi):
     fout = open(ubi, "x")
     for line in l:
         fout.write(str(line[0]) + " " + str(line[1]) + " " + str(line[2]) + " " + str(line[3]) + " " + str(line[4]) + "\n")
+    fout.close()    
 
 
 sequence = read_midifile("C:/Users/royal/Desktop/smm/HB.mid")
