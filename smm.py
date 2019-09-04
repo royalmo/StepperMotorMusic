@@ -86,5 +86,4 @@ Thread(target=ena_and_blink).start()
 Thread(target=step1).start()
 Thread(target=step2).start()
 
-sleep(10)
-print ( play_song("/home/pi/StepperMotorMusic/saves/sweetchildofmine.txt") )
+stop.wait_for_release()
