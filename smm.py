@@ -17,8 +17,9 @@ def startup_sequency():
     dis.on()
 
 def ena_and_blink():
+    global output
     while True:
-        if check_output("sudo iw dev wlan0 station dump", shell=True) == b'':
+        if output:
             dis.off()
             led.off()
             sleep(.450)
@@ -26,7 +27,7 @@ def ena_and_blink():
             sleep(.450)
         else:
             led.on()
-            dis.off()  #ENABLE LATER
+            dis.on()
             sleep(.900)
 
 def step1():
@@ -44,6 +45,26 @@ def step2():
             sm2.on()
             sm2.off()
             sleep(float(act[1]) / 1000000)
+
+def checkout():
+    global output
+    global demo
+    while True:
+        if demo :
+            output = False
+        else:
+            output = check_output("sudo iw dev wlan0 station dump", shell=True) == b''
+
+def demostration():
+    global output
+    global demo
+    while True:
+        if stop.is_pressed and output :
+            demo = True
+            a = play_song("/home/pi/smm/saves/sweetchildofmine.txt")
+            demo = False
+        else:
+            sleep(.100)
 
 def play_song(location):
     global act
@@ -79,11 +100,14 @@ led = LED(17)
 dis = LED(12)
 stop = Button(19)
 act = [0, 0]
-
+global output = True
+global demo = False
 startup_sequency()
 
 Thread(target=ena_and_blink).start()
 Thread(target=step1).start()
 Thread(target=step2).start()
+Thread(target=checkout).start()
+Thread(target=demostration).start()
 
 stop.wait_for_release()
