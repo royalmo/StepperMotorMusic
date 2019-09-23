@@ -2,6 +2,7 @@ from time import sleep
 from subprocess import check_output
 from threading import Thread
 from gpiozero import LED, Button
+from convert import *
 
 def startup_sequency():
     led.on()
@@ -66,11 +67,11 @@ def demostration():
         else:
             sleep(.100)
 
-def play_song(location):
+def play_song(location, start = 0):
     global act
     values = [0, 0, 0, 0]
     exit = 0
-    i = 0
+    i = start
     timer = 0
     with open(location, 'r') as song:
         lines = []
@@ -109,5 +110,3 @@ Thread(target=step1).start()
 Thread(target=step2).start()
 Thread(target=checkout).start()
 Thread(target=demostration).start()
-
-stop.wait_for_release()
